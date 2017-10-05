@@ -1,1 +1,1 @@
-"# Discrete-Mathematics-PA1"
+# Discrete-Mathematics-Programming-Assignment-1
