@@ -103,7 +103,6 @@ int main(void)
 			}
 		}
 	}
-
 	inf.close();
 
 	//row every num
@@ -152,7 +151,6 @@ int main(void)
 			}
 		}
 	}
-
 	ouf.close();
 
 	interpretSATsolver();
