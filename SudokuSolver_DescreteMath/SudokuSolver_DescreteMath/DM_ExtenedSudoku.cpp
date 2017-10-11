@@ -17,7 +17,6 @@ using namespace std;
 void interpretSATsolver() {
 	ifstream inf;
 	ofstream ouf;
-	system("del formula_result.txt");
 	system(".\\z3-4.3.2-x64-win\\bin\\z3 -dimacs formula.txt >> formula_result.txt");
 	inf.open("formula_result.txt");
 	ouf.open("output.txt");
@@ -27,7 +26,7 @@ void interpretSATsolver() {
 
 	if (s == "unsat") {
 		ouf << "  \"no solution\"  ";
-		cout << "  \"no solution\"  " << endl;		
+		cout << "  \"no solution\"  " << endl;
 	}
 	else {
 		int a;
@@ -39,23 +38,22 @@ void interpretSATsolver() {
 						ouf << k << " ";
 						cout << k << " ";
 					}
-						
+
 				}
 			}
 			ouf << endl;
 			cout << endl;
 		}
 	}
-	
+
 	inf.close();
 	ouf.close();
-
-	system("pause");
+	system("del formula_result.txt");
 }
 
 int main(void)
 {
-	// ½ºµµÄí ÆÛÁñ ºÒ·¯¿À±â
+	// ìŠ¤ë„ì¿  í¼ì¦ ë¶ˆëŸ¬ì˜¤ê¸°
 	int starNum = 0;
 	int star[NUMOFSTAR];
 
@@ -64,12 +62,12 @@ int main(void)
 	inf.open("input.txt");
 	ouf.open("formula.txt");
 
-	// formula.txt ¸¸µé±â
+	// formula.txt ë§Œë“¤ê¸°
 	// hint number
 	int n = 0;
 	char in;
-	ouf << "p cnf 729 " << endl;
-	int co = 1;
+	ouf << "              " << endl;
+	int co = 0;
 	for (int i = 1; i <= 9; i++) {
 		for (int j = 1; j <= 9; j++) {
 			inf.get(in);
@@ -80,7 +78,7 @@ int main(void)
 			if (in >= 48 && in <= 57) {// hint number: 48 and 57 are ASKII code of 0 and 9 
 				n = atoi(&in);
 				if (n != 0) {
-					ouf << P(i, j, n) << " 0" << endl;
+					ouf << P(i, j, n) << " 0" << endl; co++;
 				}
 			}
 			else if (in == 42) {//star number: 42 is ASKI code of *
@@ -96,10 +94,10 @@ int main(void)
 			for (int n = 1; n <= 9; n++) {
 				ouf << (star[t - 1] + n) * -1 << " ";
 				ouf << (star[t] + n) << " ";
-				ouf << 0 << endl;
+				ouf << 0 << endl; co++;
 				ouf << (star[t - 1] + n) << " ";
 				ouf << (star[t] + n) * -1 << " ";
-				ouf << 0 << endl;
+				ouf << 0 << endl; co++;
 			}
 		}
 	}
@@ -109,9 +107,9 @@ int main(void)
 	for (int i = 1; i <= 9; i++) {
 		for (int n = 1; n <= 9; n++) {
 			for (int j = 1; j <= 9; j++) {
-					ouf << P(i, j, n) << " ";
+				ouf << P(i, j, n) << " ";
 			}
-			ouf << 0 << endl;
+			ouf << 0 << endl; co++;
 		}
 	}
 
@@ -121,7 +119,7 @@ int main(void)
 			for (int i = 1; i <= 9; i++) {
 				ouf << P(i, j, n) << " ";
 			}
-			ouf << 0 << endl;
+			ouf << 0 << endl; co++;
 		}
 	}
 
@@ -134,7 +132,7 @@ int main(void)
 						ouf << P(3 * r + i, 3 * s + j, n) << " ";
 					}
 				}
-				ouf << 0 << endl;
+				ouf << 0 << endl; co++;
 			}
 		}
 	}
@@ -146,13 +144,17 @@ int main(void)
 				for (int m = n + 1; m <= 9; m++) {
 					ouf << P(i, j, n) * -1 << " ";
 					ouf << P(i, j, m) * -1 << " ";
-					ouf << 0 << endl;
+					ouf << 0 << endl; co++;
 				}
 			}
 		}
 	}
+	ouf.seekp(0, ios::beg);
+	ouf << "p cnf 729 " << co;
 	ouf.close();
 
 	interpretSATsolver();
+
+	system("pause");
 	return 0;
 }
